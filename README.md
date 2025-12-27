@@ -57,6 +57,7 @@ chmod +x install.sh
 1. **Node.js 20.x** - 使用 NodeSource 官方源
 2. **npm** - Node.js 包管理器
 3. **Claude Code** - Anthropic 官方 CLI 工具
+4. **Happy Coder** - Claude Code 移动端客户端 CLI ([happy.engineering](https://happy.engineering/))
 
 ## 安装后
 
@@ -67,7 +68,8 @@ source ~/.bashrc
 # 启动 Claude Code
 claude
 
-# 登录你的 Anthropic 账号
+# 启动 Happy Coder (可用手机控制)
+happy
 ```
 
 ## 常见问题

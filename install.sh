@@ -108,23 +108,31 @@ install_npm() {
 install_claude_code() {
     echo -e "${YELLOW}[*]${NC} Installing Claude Code..."
 
-    # Try global install first
     if npm install -g @anthropic-ai/claude-code 2>/dev/null; then
         echo -e "${GREEN}[✓]${NC} Claude Code installed globally"
     elif sudo npm install -g @anthropic-ai/claude-code 2>/dev/null; then
         echo -e "${GREEN}[✓]${NC} Claude Code installed globally (with sudo)"
     else
-        # Fallback: install with npx
         echo -e "${YELLOW}[!]${NC} Global install failed, setting up npx alias..."
-
-        # Add alias to bashrc/zshrc
         SHELL_RC="$HOME/.bashrc"
         [ -f "$HOME/.zshrc" ] && SHELL_RC="$HOME/.zshrc"
-
         if ! grep -q "alias claude=" "$SHELL_RC" 2>/dev/null; then
             echo 'alias claude="npx @anthropic-ai/claude-code"' >> "$SHELL_RC"
             echo -e "${GREEN}[✓]${NC} Added claude alias to $SHELL_RC"
         fi
+    fi
+}
+
+# Install Happy Coder (Claude Code Mobile Client)
+install_happy_coder() {
+    echo -e "${YELLOW}[*]${NC} Installing Happy Coder..."
+
+    if npm install -g happy-coder 2>/dev/null; then
+        echo -e "${GREEN}[✓]${NC} Happy Coder installed globally"
+    elif sudo npm install -g happy-coder 2>/dev/null; then
+        echo -e "${GREEN}[✓]${NC} Happy Coder installed globally (with sudo)"
+    else
+        echo -e "${YELLOW}[!]${NC} Happy Coder install failed, try manually: npm install -g happy-coder"
     fi
 }
 
@@ -166,6 +174,7 @@ main() {
     install_nodejs
     install_npm
     install_claude_code
+    install_happy_coder
     verify_installation
     print_completion
 }
