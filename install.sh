@@ -28,16 +28,25 @@ setup_baai_proxy() {
     fi
 }
 
-# 安装 Node.js
+# 安装 Node.js (使用 nvm，无需 sudo)
 install_nodejs() {
     if command -v node &> /dev/null; then
         echo "[✓] Node.js 已安装: $(node -v)"
         return 0
     fi
 
-    echo "[*] 安装 Node.js 20.x..."
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-    apt-get install -y nodejs
+    echo "[*] 安装 nvm..."
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+
+    # 加载 nvm
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+    echo "[*] 安装 Node.js 20..."
+    nvm install 20
+    nvm use 20
+    nvm alias default 20
+
     echo "[✓] Node.js 安装完成: $(node -v)"
 }
 
@@ -55,12 +64,23 @@ install_happy_coder() {
     echo "[✓] Happy Coder 安装完成"
 }
 
+# 添加到 bashrc
+setup_bashrc() {
+    if ! grep -q "NVM_DIR" ~/.bashrc 2>/dev/null; then
+        echo '' >> ~/.bashrc
+        echo '# nvm' >> ~/.bashrc
+        echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc
+        echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.bashrc
+    fi
+}
+
 # 主流程
 main() {
     setup_baai_proxy
     install_nodejs
     install_claude_code
     install_happy_coder
+    setup_bashrc
 
     echo ""
     echo "╔══════════════════════════════════════════════╗"
@@ -68,8 +88,9 @@ main() {
     echo "╚══════════════════════════════════════════════╝"
     echo ""
     echo "使用方法:"
-    echo "  claude    # 启动 Claude Code"
-    echo "  happy     # 启动 Happy (手机控制)"
+    echo "  source ~/.bashrc   # 刷新环境"
+    echo "  claude             # 启动 Claude Code"
+    echo "  happy              # 启动 Happy (手机控制)"
     echo ""
 }
 
