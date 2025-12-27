@@ -93,17 +93,52 @@ source ~/.bashrc
 npm uninstall -g @anthropic-ai/claude-code
 ```
 
-## 环境变量配置（可选）
+## 代理配置
 
-如果需要配置代理或 API Key：
+安装 Claude Code 需要访问外网，不同服务器的代理配置方式不同。
+
+### 智源 (BAAI) 服务器
+
+智源服务器已预装 Clash，位于 `/share/project/yunfan/clash`
+
+```bash
+# 1. 启动 Clash（如果没启动）
+cd /share/project/yunfan/clash
+./clash -d . &
+
+# 2. 设置代理环境变量
+export http_proxy=http://127.0.0.1:7890
+export https_proxy=http://127.0.0.1:7890
+
+# 3. 测试代理
+curl -I https://www.google.com
+# 返回 HTTP/2 200 表示成功
+
+# 4. 然后安装 Claude Code
+curl -fsSL https://raw.githubusercontent.com/EasonAI-5589/claude-for-server/master/install.sh | bash
+```
+
+> **注意**：如果提示 `address already in use`，说明 Clash 已经在运行，直接设置环境变量即可。
+
+### AutoDL 服务器
+
+> 待完善
+
+### 恒源云服务器
+
+> 待完善
+
+### 阿里云/腾讯云
+
+> 待完善
+
+---
+
+## 环境变量配置（可选）
 
 ```bash
 # 添加到 ~/.bashrc
 export ANTHROPIC_API_KEY="your-api-key"
-
-# 如果需要代理
-export HTTP_PROXY="http://127.0.0.1:7890"
-export HTTPS_PROXY="http://127.0.0.1:7890"
 ```
 
 ## License
