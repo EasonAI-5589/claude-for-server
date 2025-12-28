@@ -101,6 +101,30 @@ npm uninstall -g @anthropic-ai/claude-code
 
 智源服务器已预装 Clash，位于 `/share/project/yunfan/clash`
 
+#### 快速启动 Snippet（推荐放入 tmux）
+
+```bash
+# 一键启动代理 + Happy (复制粘贴即可)
+cd /share/project/yunfan/clash && pkill clash 2>/dev/null; ./clash -d . &
+sleep 2
+export http_proxy=http://127.0.0.1:7890 https_proxy=http://127.0.0.1:7890 HTTP_PROXY=http://127.0.0.1:7890 HTTPS_PROXY=http://127.0.0.1:7890
+git config --global http.proxy http://127.0.0.1:7890 && git config --global https.proxy http://127.0.0.1:7890
+cd /share/project/guoyichen
+happy
+```
+
+**使用方法**：
+```bash
+# 1. 先开 tmux 会话
+tmux new -s happy
+
+# 2. 粘贴上面的 snippet
+
+# 3. 手机扫码连接 Happy
+```
+
+#### 分步说明
+
 ```bash
 # 1. 启动 Clash（如果没启动）
 cd /share/project/yunfan/clash
