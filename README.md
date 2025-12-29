@@ -105,7 +105,8 @@ npm uninstall -g @anthropic-ai/claude-code
 
 ```bash
 # 一键启动代理 + Happy (复制粘贴即可)
-cd /share/project/yunfan/clash && pkill clash 2>/dev/null; ./clash -d . &
+pkill clash 2>/dev/null
+cd /share/project/guoyichen/clash && nohup ./clash -d . > /dev/null 2>&1 &
 sleep 2
 export http_proxy=http://127.0.0.1:7890 https_proxy=http://127.0.0.1:7890 HTTP_PROXY=http://127.0.0.1:7890 HTTPS_PROXY=http://127.0.0.1:7890
 git config --global http.proxy http://127.0.0.1:7890 && git config --global https.proxy http://127.0.0.1:7890
@@ -122,6 +123,50 @@ tmux new -s happy
 
 # 3. 手机扫码连接 Happy
 ```
+
+#### 使用自己的 Clash 配置（推荐）
+
+云帆预装的 Clash 配置可能不稳定，建议使用自己的订阅：
+
+```bash
+# 1. 复制 Clash 到自己目录
+cp -r /share/project/yunfan/clash /share/project/guoyichen/
+
+# 2. 从本地 Mac 上传订阅配置（Clash Verge 配置路径）
+# 在 Mac 本地终端运行：
+scp "/Users/你的用户名/Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/你的配置.yaml" "BAAI2-ssh.platform-sz.jingneng-inner.ac.cn:/share/project/guoyichen/clash/config.yaml"
+
+# 3. 重启 Clash
+pkill clash
+cd /share/project/guoyichen/clash && nohup ./clash -d . > /dev/null 2>&1 &
+```
+
+#### 节点选择建议
+
+**⚠️ 重要**：香港节点可能被 Anthropic 封禁（返回 403），建议使用：
+- 🇯🇵 日本节点（推荐，最稳定）
+- 🇺🇸 美国节点
+- 🇸🇬 新加坡节点
+
+**切换节点**：
+```bash
+# 查看可用节点
+curl -s http://127.0.0.1:9090/proxies | grep -o '"name":"[^"]*"' | head -20
+
+# 切换到日本节点
+curl -X PUT "http://127.0.0.1:9090/proxies/🚀%20节点选择" -d '{"name":"🇯🇵 日本 01"}'
+
+# 验证当前节点
+curl -s http://127.0.0.1:9090/proxies/🚀%20节点选择 | grep -o '"now":"[^"]*"'
+```
+
+#### OAuth 登录问题
+
+如果 `/login` 时出现 `OAuth error: Failed to fetch user roles` 或 TLS 错误：
+
+1. **换节点**：香港节点经常被封，换成日本/美国
+2. **多试几次**：网络不稳定时重试即可
+3. **用 Happy 替代**：`happy` 命令用手机扫码，不需要 OAuth 回调
 
 #### 分步说明
 
